@@ -1,27 +1,50 @@
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView, Pressable} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {SlotsProps} from '../types';
 import {COLORS} from '../constants/color';
 import Button from './Button';
 
-const Slots: React.FC<SlotsProps> = ({date, shifts, button, overlap}) => {
+const Slots: React.FC<SlotsProps> = ({date, shifts, isAvailableTab}) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>{date}</Text>
-        <Text style={styles.headerSubText}>
-          {shifts.length} shifts,{' '}
-          {shifts.reduce((total, shift) => total + shift.hours, 0)} h
-        </Text>
+        {!isAvailableTab && (
+          <Text style={styles.headerSubText}>
+            {shifts.length} {shifts.length > 1 ? 'shifts' : 'shift'},{' '}
+            {shifts.reduce((total, shift) => total + shift.hours, 0)} h
+          </Text>
+        )}
       </View>
-      <ScrollView style={styles.body}>
+      <ScrollView>
         {shifts.map((shift, index) => (
           <View key={index} style={styles.shiftContainer}>
-            <View>
+            <View style={styles.shift}>
               <Text style={styles.shiftTime}>{shift.time}</Text>
-              <Text style={styles.shiftLocation}>{shift.location}</Text>
+              {!isAvailableTab && (
+                <Text style={styles.shiftLocation}>{shift.location}</Text>
+              )}
             </View>
-            {/* <Button title={shift} /> */}
+            <View
+              style={[
+                styles.buttonContainer,
+                {justifyContent: isAvailableTab ? 'space-between' : 'flex-end'},
+              ]}>
+              {isAvailableTab && (
+                <Text style={styles.shiftStatus}>{shift.button}</Text>
+              )}
+              <Button
+                title={shift.button}
+                color={
+                  shift.overlap
+                    ? COLORS.primary_gray
+                    : shift.button === 'Cancel'
+                      ? COLORS.primary_pink
+                      : COLORS.primary_green
+                }
+                disabled={shift.overlap}
+              />
+            </View>
           </View>
         ))}
       </ScrollView>
@@ -31,21 +54,18 @@ const Slots: React.FC<SlotsProps> = ({date, shifts, button, overlap}) => {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 10,
-    borderRadius: 10,
     overflow: 'hidden',
-    backgroundColor: '#f9f9f9',
   },
   header: {
     backgroundColor: '#f0f0f0',
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
     gap: 16,
+    borderBottomWidth: 1,
+    borderColor: '#ddd',
   },
   headerText: {
     fontSize: 16,
@@ -56,15 +76,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.time_slot_subtext,
   },
-  body: {
-    padding: 10,
-  },
   shiftContainer: {
-    marginBottom: 16,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#ddd',
+    backgroundColor: '#f9f9f9',
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+  },
+  shift: {
+    width: '50%',
   },
   shiftTime: {
     fontSize: 16,
@@ -74,44 +98,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.time_slot_subtext,
   },
-  cancelButton: {
-    borderWidth: 1,
-    borderColor: COLORS.primary_pink,
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    textAlign: 'center',
-    borderRadius: 50,
+  buttonContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  bookButton: {
-    borderWidth: 1,
-    borderColor: COLORS.primary_green,
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    textAlign: 'center',
-    borderRadius: 50,
-  },
-  inactiveButton: {
-    borderWidth: 1,
-    borderColor: COLORS.primary_gray,
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    textAlign: 'center',
-    borderRadius: 50,
-  },
-  cancelButtonText: {
+  shiftStatus: {
+    marginRight: 10,
     fontSize: 14,
     fontWeight: '500',
-    color: COLORS.primary_pink,
-  },
-  bookButtonText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: COLORS.primary_green,
-  },
-  inactiveButtonText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: COLORS.primary_gray,
+    color: COLORS.primary_blue,
+    textAlign: 'left',
+    justifyContent: 'flex-start',
   },
 });
 

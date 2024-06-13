@@ -12,7 +12,7 @@ const Button: React.FC<ButtonProps> = ({
   title,
   color,
   disabled = false,
-  onClick,
+  //   onClick,
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -20,7 +20,7 @@ const Button: React.FC<ButtonProps> = ({
     if (disabled || loading) return;
     setLoading(true);
     try {
-      await onClick();
+      //   await onClick();
     } finally {
       setLoading(false);
     }
@@ -48,19 +48,20 @@ const Button: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    borderWidth: 1,
+    borderWidth: 2,
     paddingVertical: 10,
-    paddingHorizontal: 30,
+    width: 100,
     textAlign: 'center',
     borderRadius: 50,
     backgroundColor: '#fff',
   },
   buttonDisabled: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#fff',
   },
   buttonText: {
     fontSize: 14,
     fontWeight: '500',
+    textAlign: 'center',
   },
 });
 

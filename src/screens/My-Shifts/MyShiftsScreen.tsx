@@ -7,45 +7,63 @@ const MyShiftsScreen = () => {
   const shiftsData: {
     date: string;
     shifts: Shift[];
-    button: string;
-    overlap: boolean;
   }[] = [
     {
       date: 'Today',
       shifts: [
-        {time: '14:00-16:00', location: 'Helsinki', hours: 2},
-        {time: '14:00-16:00', location: 'Helsinki', hours: 2},
+        {
+          time: '14:00-16:00',
+          location: 'Helsinki',
+          hours: 2,
+          button: 'Cancel',
+          overlap: false,
+        },
+        {
+          time: '14:00-16:00',
+          location: 'Helsinki',
+          hours: 2,
+          button: 'Cancel',
+          overlap: true,
+        },
       ],
-      button: 'Cancel',
-      overlap: false,
     },
     {
       date: 'Tomorrow',
-      shifts: [{time: '12:00-16:00', location: 'Tampere', hours: 4}],
-      button: 'Book',
-      overlap: true,
+      shifts: [
+        {
+          time: '12:00-16:00',
+          location: 'Tampere',
+          hours: 4,
+          button: 'Cancel',
+          overlap: false,
+        },
+      ],
     },
     {
       date: 'September 22',
       shifts: [
-        {time: '9:00-11:00', location: 'Turku', hours: 2},
-        {time: '13:30-15:00', location: 'Turku', hours: 1.5},
+        {
+          time: '9:00-11:00',
+          location: 'Turku',
+          hours: 2,
+          button: 'Book',
+          overlap: false,
+        },
+        {
+          time: '13:30-15:00',
+          location: 'Turku',
+          hours: 1.5,
+          button: 'Book',
+          overlap: true,
+        },
       ],
-      button: 'Book',
-      overlap: false,
     },
   ];
 
   return (
     <ScrollView>
       {shiftsData.map((shiftData, index) => (
-        <Slots
-          key={index}
-          date={shiftData.date}
-          shifts={shiftData.shifts}
-          overlap={shiftData.overlap}
-          button={shiftData.button}
-        />
+        <Slots key={index} date={shiftData.date} shifts={shiftData.shifts} />
       ))}
     </ScrollView>
   );
